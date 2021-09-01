@@ -12,6 +12,6 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  arr = ['First Line','Second Line', 'Third Line', 'Fourth Line'];
+  arr = ['First Line','Second Line', 'Third Line', 'Fourth Line', 'Fifth Line'];
 
 }
