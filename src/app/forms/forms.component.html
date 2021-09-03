@@ -29,45 +29,46 @@
     <small *ngIf="!myReactiveForm.get('city')?.valid && myReactiveForm.get('city')?.touched" class="text-danger">Please
         Enter Your City</small><br>
 
-
-
     <div formArrayName="family">
 
         <h5 class="mt-3">Family</h5>
         <button (click)="onAddMember()" class="btn btn-primary" type="button">Add Another</button> &nbsp;
-        <button class="btn btn-danger" type="button">Remove</button><br>
+        <button (click)="removeFamily()" class="btn btn-danger" type="button">Remove</button><br>
 
-        <div *ngFor="let member of myReactiveForm.get('family')?.value; let i=index">
+        <div *ngFor="let member of myReactiveForm.get('family')?.value; let i=index; trackBy:trackByFn">
 
-            
+            <div [formGroupName]="i">
                 <label class="form-label mt-3" for="relation">Relation:</label>
                 <input class="form-control" id="relation" type="text" placeholder="Enter Relation"
-                >
-                
-                <small *ngIf="!myReactiveForm.get('relation')?.valid && myReactiveForm.get('relation')?.touched"
-                    class="text-danger">Please Enter Relation</small><br>
+                    formControlName="relation">
+
+                <!-- <small *ngIf="!myReactiveForm.get('family.relation')?.valid && myReactiveForm.get('relation')?.touched"
+                    class="text-danger">Please Enter Relation</small><br> -->
 
                 <label class="form-label" for="rname">Name:</label>
-                <input class="form-control" id="rname" type="text" placeholder="Enter Name" 
-                >
-                <small *ngIf="!myReactiveForm.get('rname')?.valid && myReactiveForm.get('rname')?.touched"
-                    class="text-danger">Please Enter Name</small><br>
-            
+                <input class="form-control" id="rname" type="text" placeholder="Enter Name" formControlName="rname">
+                <!-- <small *ngIf="!myReactiveForm.get('rname')?.valid && myReactiveForm.get('rname')?.touched"
+                    class="text-danger">Please Enter Name</small><br> -->
+            </div>
+
         </div>
     </div>
 
     <button class="btn btn-success mt-2" type="submit">Submit</button>
 
-    <!-- <p>{{myReactiveForm.get('family')?.value}}</p> -->
+    <!-- <p>{{myReactiveForm.get('family')}}</p> -->
     <div *ngIf="isSubmitted" class="mt-4">
         <p>Name : {{formData.name}}</p>
         <p>Email ID : {{formData.email}}</p>
         <!-- <p>Password : {{formData.password}}</p> -->
         <p>Mobile Number : {{formData.phno}}</p>
         <p>City : {{formData.city}}</p>
-        <h6 class="mt-3">Family Member 1:</h6>
-        <!-- <ng-container *ngFor=""></ng-container> -->
-        <p>Relation : {{formData.family.relation}}</p>
-        <p>Name : {{formData.family.rname}}</p>
+
+        <ng-container *ngFor="let elem of formData.family; let i=index">
+            <h6 class="mt-3">Family Member {{i+1}}:</h6>
+            <p>Relation : {{elem.relation}}</p>
+            <p>Name : {{elem.rname}}</p>
+        </ng-container>
+
     </div>
 </form>

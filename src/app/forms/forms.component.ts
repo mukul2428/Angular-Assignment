@@ -11,18 +11,19 @@ export class FormsComponent implements OnInit {
 
   myReactiveForm!: FormGroup
   // family!:any
-  formData={
-    name:'',
-    email:'',
-    password:'',
-    phno:'',
-    city:'',
-    family:{
-      relation:'',
-      rname:''
-    }
+  formData = {
+    name: '',
+    email: '',
+    password: '',
+    phno: '',
+    city: '',
+    family: [{
+      relation: '',
+      rname: ''
+    }]
   }
-  isSubmitted:boolean = false;
+  isSubmitted: boolean = false;
+  countBox: number = 1;
 
   constructor(private fb: FormBuilder) { }
 
@@ -33,11 +34,16 @@ export class FormsComponent implements OnInit {
       password: ['', [Validators.required, Validators.pattern("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")]],
       phno: ['', [Validators.required]],
       city: ['', [Validators.required]],
-      family: this.fb.array([1])     
+      family: this.fb.array([
+        this.fb.group({
+          relation: ['', Validators.required],
+          rname: ['', Validators.required]
+        })
+      ])
     })
   }
 
-  onSubmit(form:any) {
+  onSubmit(form: any) {
     console.log(this.myReactiveForm);
     this.isSubmitted = true;
     this.formData.name = form.value.name;
@@ -45,18 +51,30 @@ export class FormsComponent implements OnInit {
     this.formData.password = form.value.password;
     this.formData.phno = form.value.phno;
     this.formData.city = form.value.city;
-    // this.formData.family.relation = form.family.value.relation;
-    // console.log(this.formData.family.relation)
+
+    for (let i = 0; i < this.countBox; i++) {
+
+      this.formData.family[i].relation = form.value.family[i].relation;
+      this.formData.family[i].rname = form.value.family[i].rname;
+      // console.log(form.value.family[i].relation);
+    }
   }
 
-
-  get familyMember(){
+  get familyMember() {
     // console.log("Sds");
     return this.myReactiveForm.get('family') as FormArray;
   }
 
-  onAddMember(){
+  onAddMember() {
     // console.log("Sds");
+    this.countBox++;
+    this.formData.family.push(
+      {
+        relation: '',
+        rname: ''
+      }
+    );
+    // console.log(this.formData.family);
     const member = this.fb.group({
       relation: ['', Validators.required],
       rname: ['', Validators.required]
@@ -64,9 +82,13 @@ export class FormsComponent implements OnInit {
     this.familyMember.push(member);
   }
 
-  removeFamily()
-  {
-    this.familyMember.removeAt(this.familyMember.length-1);
+  removeFamily() {
+    this.familyMember.removeAt(this.familyMember.length - 1);
+  }
+
+  //to fix issue of input field lose focus
+  trackByFn(index: any, item: any) {
+    return index;
   }
 
 }
