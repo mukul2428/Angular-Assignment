@@ -58,6 +58,7 @@ export class FormsComponent implements OnInit {
       this.formData.family[i].rname = form.value.family[i].rname;
       // console.log(form.value.family[i].relation);
     }
+    // console.log(this.myReactiveForm.get('family')?.get('0')?.get('relation')?.value);
   }
 
   get familyMember() {
@@ -85,10 +86,4 @@ export class FormsComponent implements OnInit {
   removeFamily() {
     this.familyMember.removeAt(this.familyMember.length - 1);
   }
-
-  //to fix issue of input field lose focus
-  trackByFn(index: any, item: any) {
-    return index;
-  }
-
 }
